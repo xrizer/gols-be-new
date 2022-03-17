@@ -72,9 +72,9 @@ const userLoginHandler = (request, h) => {
             const response = h.response({
               error: 'WRONG_PASSWORD',
               message: 'Password Salah',
-              statusCode: 403,
+              statusCode: 200,
             });
-            response.code(403);
+            response.code(200);
             return response;
 
           }
@@ -119,10 +119,10 @@ const userLoginHandler = (request, h) => {
 
               const response = h.response({
                 error: 'FORBIDDEN',
-                message: 'Tidak terdapat data CS pada rumah sakit ' + results[0].nama_rs,
-                statusCode: 403,
+                message: 'Tidak terdapat data CS pada ' + results[0].nama_rs,
+                statusCode: 200,
               });
-              response.code(403);
+              response.code(200);
               return response;
 
             } else {
@@ -170,9 +170,9 @@ const userLoginHandler = (request, h) => {
             const response = h.response({
               error: 'WRONG_PASSWORD',
               message: 'Password Salah',
-              statusCode: 403,
+              statusCode: 200,
             });
-            response.code(403);
+            response.code(200);
             return response;
 
           }
