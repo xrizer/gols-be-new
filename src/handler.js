@@ -575,7 +575,7 @@ const addInvoiceHandler = async (request, h) => {
     } else if (request.payload.metode_bayar == 'QRIS') {
       listRiwayat = [
         { transaksi_id: addInvoice.id, detail_riwayat: 'Menunggu pembayaran' },
-        { transaksi_id: addInvoice.id, detail_riwayat: 'Pembayaran selesai' },
+        { transaksi_id: addInvoice.id, detail_riwayat: 'Pembayaran lunas' },
       ];
     }
 
@@ -626,14 +626,14 @@ const getListInvoiceHandler = (request, h) => {
     return response;
   }
 
-  const filter = (authData.role == 'admin') ? { field: 'rs.is_cs', data: 0 } : { field: 'rs.id', data: authData.detail_rs.id };
+  // const filter = (authData.role == 'admin') ? { field: 'rs.id', data: request.query.rs_id } : { field: 'rs.id', data: authData.detail_rs.id };
 
   const status = (request.query.status) ? request.query.status : '';
 
   return knex('rs')
-    .select('transaksi.id', 'transaksi.updated_at', 'transaksi.nama_pasien', 'transaksi.no_resi', 'transaksi.status', 'rs.is_cs')
+    .select('transaksi.id', 'transaksi.rs_id', 'transaksi.updated_at', 'transaksi.nama_pasien', 'transaksi.no_resi', 'transaksi.status', 'rs.is_cs')
     .rightJoin('transaksi', 'rs.id', 'transaksi.rs_id')
-    .where(filter.field, '=', filter.data)
+    .where('rs_id', '=', request.query.rs_id)
     .andWhere('status', 'like', '%' + status + '%')
     .then((results) => {
 
@@ -809,16 +809,20 @@ const updateInvoiceHandler = async (request, h) => {
     } else if (request.payload.status) {
 
       var detailRiwayat = '';
-      if (request.payload.status == 'Paid') {
-        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Pembayaran selesai' };
-      } else if (request.payload.status == 'Medicines On Progress') {
-        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat sedang disiapkan' };
-      } else if (request.payload.status == 'Medicines Ready') {
-        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat siap diantarkan' };
-      } else if (request.payload.status == 'Medicises On Shipping') {
-        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat sedang diantarkan' };
-      } else if (request.payload.status == 'Completed') {
-        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat telah diterima oleh pasien' };
+      if (request.payload.status == 'Belum Dibayar') {
+        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Menunggu pembayaran' };
+      } else if (request.payload.status == 'Sudah Dibayar') {
+        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Pembayaran lunas' };
+      }else if (request.payload.status == 'Obat Diracik') {
+        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat sedang diracik' };
+      }else if (request.payload.status == 'Obat Siap') {
+        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat selesai diracik' };
+      }else if (request.payload.status == 'Menunggu Diambil') {
+        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat menunggu diambil oleh driver' };
+      }else if (request.payload.status == 'Obat Diantar') {
+        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat sedang diantar menuju alamat' };
+      }else if (request.payload.status == 'Obat Diterima') {
+        detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat telah diterima oleh pelanggan' };
       }
 
       return await knex('riwayat')
