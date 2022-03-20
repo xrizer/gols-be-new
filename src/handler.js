@@ -223,8 +223,8 @@ const userAuthHandler = (request, h) => {
 
 };
 
-const addHospitalHandler = (request, h) => {
-
+const addHospitalHandler = async(request, h) => {
+  console.log(request.payload)
   const authHeader = request.headers.authorization.split(' ')[1];
   if (authHeader) {
     authData = getAuth(authHeader);
@@ -239,11 +239,38 @@ const addHospitalHandler = (request, h) => {
     return response;
   }
 
+
+  const checkKode = await knex('rs')
+  .select()
+  .where('kode_rs','=',request.payload.kode_rs)
+  .then((results) => {
+    
+    if (!results || results.length == 0) {
+        return true;
+    }else{
+      return false;
+    }
+  })
+
+  if(!checkKode){
+    const response = h.response({
+      error: 'Duplicate Entry',
+      message: 'Kode rumah sakit sudah ada',
+      statusCode: 200,
+    });
+    response.code(200);
+    return response;
+  }
+
   const newRecord = request.payload;
 
-  newRecord.pin = pin;
+  if(!request.payload.pin){
+    newRecord.pin = pin;
+  }
 
-  return knex('rs')
+  
+
+  return await knex('rs')
     .insert(newRecord)
     .then((results) => {
 
@@ -289,7 +316,7 @@ const getListHospitalHandler = (request, h) => {
   }
 
   return knex('rs')
-    .select('rs.id', 'rs.kode_rs', 'rs.is_cs', 'rs.nama_rs',knex.raw('COALESCE(`transaksi`.`num_progress`, 0 ) as ??', ['num_progress']))
+    .select('rs.id', 'rs.kode_rs', 'rs.is_cs', 'rs.nama_rs',knex.raw('COALESCE(`transaksi`.`num_progress`, 0 ) as ??', ['num_progress']),'rs.updated_at')
     .leftJoin(
       knex('transaksi')
       .select('rs_id', knex.raw('count(*) as ??', ['num_progress']))
@@ -299,7 +326,7 @@ const getListHospitalHandler = (request, h) => {
     )
     .where('rs.is_cs','=',request.query.cs)
     .andWhere('rs.nama_rs','like','%'+request.query.nama_rs+'%')
-    
+    .orderBy('updated_at', 'desc')
     .then((results) => {
 
       if (!results || results.length == 0) {
@@ -398,7 +425,7 @@ const getDetailHospitalHandler = (request, h) => {
 
   return knex('rs')
     .where({ id: request.params.id })
-    .select('id', 'kode_rs', 'is_cs', 'nama_rs', 'alamat_rs', 'long_rs', 'lat_rs', 'font_size')
+    .select('id', 'kode_rs', 'is_cs', 'nama_rs', 'alamat_rs', 'long_rs', 'lat_rs', 'font_size','pin')
     .then((results) => {
 
       if (!results || results.length == 0) {
@@ -631,10 +658,11 @@ const getListInvoiceHandler = (request, h) => {
   const status = (request.query.status) ? request.query.status : '';
 
   return knex('rs')
-    .select('transaksi.id', 'transaksi.rs_id', 'transaksi.updated_at', 'transaksi.nama_pasien', 'transaksi.no_resi', 'transaksi.status', 'rs.is_cs')
+    .select('transaksi.id', 'transaksi.rs_id', 'transaksi.updated_at', 'transaksi.nama_pasien', 'transaksi.no_resi', 'transaksi.status', 'rs.is_cs','transaksi.updated_at')
     .rightJoin('transaksi', 'rs.id', 'transaksi.rs_id')
     .where('rs_id', '=', request.query.rs_id)
     .andWhere('status', 'like', '%' + status + '%')
+    .orderBy('updated_at', 'desc')
     .then((results) => {
 
       if (!results || results.length == 0) {
@@ -776,9 +804,20 @@ const updateInvoiceHandler = async (request, h) => {
     return response;
   }
 
+  var updateInvoiceData = '';
+  if(request.payload.nama_driver != ''){
+    updateInvoiceData = {
+      nama_driver: request.payload.nama_driver
+    }
+  }else if(request.payload.status != ''){
+    updateInvoiceData = {
+      status: request.payload.status
+    }
+  }
+
   const detailInvoice = await knex('transaksi')
     .where({ id: request.params.id })
-    .update(request.payload)
+    .update(updateInvoiceData)
     .then((results) => {
 
       return {
@@ -863,7 +902,7 @@ const updateInvoiceHandler = async (request, h) => {
 
 }
 
-const addPromoHandler = (request, h) => {
+const addPromoHandler = async (request, h) => {
 
   const authHeader = request.headers.authorization.split(' ')[1];
   if (authHeader) {
@@ -879,7 +918,30 @@ const addPromoHandler = (request, h) => {
     return response;
   }
 
-  return knex('promo')
+  const checkKode = await knex('promo')
+  .select()
+  .where('kode_promo','=',request.payload.kode_promo)
+  .andWhere('is_expired','=','0')
+  .then((results) => {
+    
+    if (!results || results.length == 0) {
+        return true;
+    }else{
+      return false;
+    }
+  })
+
+  if(!checkKode){
+    const response = h.response({
+      error: 'Duplicate Entry',
+      message: 'Kode promo masih berlaku',
+      statusCode: 200,
+    });
+    response.code(200);
+    return response;
+  }
+
+  return await knex('promo')
     .insert(request.payload)
     .then((results) => {
 
@@ -926,6 +988,7 @@ const getListPromoHandler = (request, h) => {
     .select()
     .where('kode_promo','like','%'+request.query.kode_promo+'%')
     .andWhere({is_expired:request.query.is_expired})
+    .orderBy('updated_at', 'desc')
     .then((results) => {
 
       if (!results || results.length == 0) {
@@ -1116,6 +1179,7 @@ const getTrackHandler = async (request, h) => {
     .select('transaksi.*', 'rs.nama_rs', 'rs.alamat_rs')
     .rightJoin('transaksi', 'rs.id', 'transaksi.rs_id')
     .where('transaksi.no_resi', '=', request.params.resi)
+    
     .then((results) => {
 
       if (!results || results.length == 0) {
@@ -1147,8 +1211,9 @@ const getTrackHandler = async (request, h) => {
   if (detailInvoice.statusCode == 200 && detailInvoice.err != 'NULL_DATA') {
 
     return await knex('riwayat')
-      .select()
+      .select('id','detail_riwayat',knex.raw('DATE_FORMAT(`created_at`, "%Y-%m-%d %H:%i:%s") as ??', ['created_at']))
       .where('transaksi_id', '=', detailInvoice.detail_transaksi.id)
+      .orderBy('id', 'desc')
       .then((results) => {
 
         const response = h.response({
@@ -1163,6 +1228,8 @@ const getTrackHandler = async (request, h) => {
 
       })
       .catch((err) => {
+
+// https://www.duniailkom.com/tutorial-belajar-mysql-cara-memformat-tampilan-tanggal-mysql-date_format/
 
         const response = h.response({
           error: err,
