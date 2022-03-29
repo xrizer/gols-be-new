@@ -17,6 +17,7 @@ const {
     updatePromoHandler,
     getCostHandler,
     getTrackHandler,
+    getCheckPromoHandler,
 } = require('./handler');
 
 const routes = [
@@ -179,6 +180,13 @@ const routes = [
             payload: {
                 multipart: true,
             },
+        },
+    },
+    { // Untuk detail promo di halaman detail promo #admin
+        method: 'GET',
+        path: '/api/check_promo/{kode_promo}',
+        handler: getCheckPromoHandler,
+        options: {
         },
     },
 ];

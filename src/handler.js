@@ -569,8 +569,10 @@ const addInvoiceHandler = async (request, h) => {
     return response;
   }
 
+  const req = request.payload;
+  req.rs_id = authData.detail_rs.id
   const addInvoice = await knex('transaksi')
-    .insert(request.payload)
+    .insert(req)
     .then((results) => {
 
       return {
@@ -1251,6 +1253,65 @@ const getTrackHandler = async (request, h) => {
 
 }
 
+const getCheckPromoHandler = (request, h) => {
+
+  const authHeader = request.headers.authorization.split(' ')[1];
+  if (authHeader) {
+    authData = getAuth(authHeader);
+  }
+  if (authData.message == 'invalid token' || authData.message == 'jwt expired' || authData.message == 'jwt malformed' || authData.message == 'Unexpected token  in JSON at position 0') {
+    const response = h.response({
+      error: 'FORBIDDEN',
+      message: authData.message,
+      statusCode: 403,
+    });
+    response.code(403);
+    return response;
+  }
+
+  return knex('promo')
+    .where('kode_promo','=',request.params.kode_promo)
+    .andWhere('max_jarak','>=',request.query.jarak)
+    .select()
+    .then((results) => {
+
+      if (!results || results.length == 0) {
+
+        const response = h.response({
+          error: 'NULL_DATA',
+          message: 'Detail promo tidak ditemukan',
+          statusCode: 200,
+        });
+        response.code(200);
+        return response;
+
+      } else {
+
+        const response = h.response({
+          error: '-',
+          message: 'Detail promo ditemukan',
+          statusCode: 200,
+          detail_promo: results[0],
+        });
+        response.code(200);
+        return response;
+
+      }
+
+    }).catch((err) => {
+
+      const response = h.response({
+        error: err,
+        message: 'Internal server error',
+        statusCode: 500,
+      });
+      response.code(500);
+      return response;
+
+    });
+
+}
+
 module.exports = {
   userLoginHandler,
   userAuthHandler,
@@ -1269,4 +1330,5 @@ module.exports = {
   updatePromoHandler,
   getCostHandler,
   getTrackHandler,
+  getCheckPromoHandler,
 };

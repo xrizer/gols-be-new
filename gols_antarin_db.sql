@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 20, 2022 at 02:37 PM
+-- Generation Time: Mar 29, 2022 at 12:20 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.1.2
 
@@ -91,12 +91,12 @@ INSERT INTO `promo` (`id`, `kode_promo`, `harga_potongan`, `max_jarak`, `is_expi
 (6, 'KD', 1000, 0, 0, '2022-03-18 10:57:01', '2022-03-18 10:57:01'),
 (7, 'DFGGHHH', 12000, 0, 1, '2022-03-18 11:00:49', '2022-03-19 04:14:13'),
 (8, 'WEEE', 5000, 0, 0, '2022-03-18 11:02:58', '2022-03-18 11:02:58'),
-(9, 'ES', 233, 0, 0, '2022-03-18 11:03:48', '2022-03-18 11:03:48'),
+(9, 'ES', 233, 5, 0, '2022-03-18 11:03:48', '2022-03-24 11:32:54'),
 (10, 'QWE', 244, 0, 1, '2022-03-18 11:04:01', '2022-03-20 01:50:20'),
-(11, 'WER', 233, 0, 0, '2022-03-18 11:05:00', '2022-03-18 11:05:00'),
+(11, 'WER', 233, 55, 0, '2022-03-18 11:05:00', '2022-03-24 10:26:26'),
 (12, 'HUYRHV', 1255, 0, 1, '2022-03-20 01:58:41', '2022-03-20 01:58:52'),
 (13, 'KJJJ', 1000, 55, 0, '2022-03-20 07:56:31', '2022-03-20 07:56:31'),
-(14, 'KJ', 200, 3, 0, '2022-03-20 07:56:46', '2022-03-20 07:56:46');
+(14, 'KJ', 200, 4, 0, '2022-03-20 07:56:46', '2022-03-24 11:32:50');
 
 -- --------------------------------------------------------
 
@@ -158,7 +158,22 @@ INSERT INTO `riwayat` (`id`, `transaksi_id`, `detail_riwayat`, `created_at`) VAL
 (40, 34, 'Obat selesai diracik', '2022-03-20 01:49:01'),
 (41, 27, 'Obat sedang diracik', '2022-03-20 02:09:50'),
 (42, 27, 'Obat selesai diracik', '2022-03-20 02:09:57'),
-(43, 27, 'Obat menunggu diambil oleh driver', '2022-03-20 02:10:01');
+(43, 27, 'Obat menunggu diambil oleh driver', '2022-03-20 02:10:01'),
+(44, 36, 'Menunggu pembayaran', '2022-03-28 10:59:13'),
+(45, 39, 'Menunggu pembayaran', '2022-03-28 11:08:12'),
+(46, 40, 'Menunggu pembayaran', '2022-03-28 11:21:25'),
+(47, 41, 'Menunggu pembayaran', '2022-03-28 11:24:37'),
+(48, 44, 'Menunggu pembayaran', '2022-03-28 11:26:56'),
+(49, 45, 'Menunggu pembayaran', '2022-03-28 11:36:25'),
+(50, 46, 'Menunggu pembayaran', '2022-03-28 12:26:10'),
+(51, 47, 'Menunggu pembayaran', '2022-03-28 12:35:21'),
+(52, 48, 'Menunggu pembayaran', '2022-03-28 12:38:37'),
+(53, 49, 'Menunggu pembayaran', '2022-03-29 07:20:00'),
+(54, 51, 'Menunggu pembayaran', '2022-03-29 07:21:53'),
+(55, 52, 'Menunggu pembayaran', '2022-03-29 07:23:12'),
+(56, 53, 'Menunggu pembayaran', '2022-03-29 07:25:44'),
+(57, 54, 'Menunggu pembayaran', '2022-03-29 08:13:38'),
+(58, 55, 'Menunggu pembayaran', '2022-03-29 08:16:41');
 
 -- --------------------------------------------------------
 
@@ -206,8 +221,9 @@ CREATE TABLE `transaksi` (
   `rs_id` int(11) NOT NULL,
   `nama_pasien` varchar(50) NOT NULL,
   `alamat_pasien` varchar(300) NOT NULL,
-  `long_pasien` double NOT NULL,
-  `lat_pasien` double NOT NULL,
+  `alamat_maps` varchar(300) NOT NULL,
+  `long_pasien` double DEFAULT NULL,
+  `lat_pasien` double DEFAULT NULL,
   `telp_pasien` varchar(25) NOT NULL,
   `no_antrian` int(11) NOT NULL,
   `no_resi` varchar(50) NOT NULL,
@@ -222,6 +238,8 @@ CREATE TABLE `transaksi` (
   `nama_driver` varchar(50) DEFAULT NULL,
   `telp_driver` varchar(25) DEFAULT NULL,
   `status` varchar(30) NOT NULL,
+  `qris_content` varchar(400) DEFAULT NULL,
+  `qris_invid` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -230,22 +248,37 @@ CREATE TABLE `transaksi` (
 -- Dumping data for table `transaksi`
 --
 
-INSERT INTO `transaksi` (`id`, `rs_id`, `nama_pasien`, `alamat_pasien`, `long_pasien`, `lat_pasien`, `telp_pasien`, `no_antrian`, `no_resi`, `jarak_antar`, `harga_awal`, `harga_driver`, `kode_promo`, `harga_potongan`, `harga_untung`, `metode_bayar`, `metode_antar`, `nama_driver`, `telp_driver`, `status`, `created_at`, `updated_at`) VALUES
-(20, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160893573', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'nulllll', '+62823576983', 'Obat Diracik', '2022-02-26 19:03:51', '2022-03-19 10:36:18'),
-(21, 2, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSUDS-160893573', 3.1, 12000, 6000, NULL, 0, 6000, 'Tunai', 'Same-day', 'Supar', '082334568', 'Obat Diterima', '2022-02-26 19:06:05', '2022-03-19 11:08:52'),
-(22, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160893572', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'iqballl', '+62823576983', 'Obat Diterima', '2022-02-26 19:03:51', '2022-03-20 01:19:32'),
-(24, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160893574', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Supp', '+62823576983', 'Menunggu Diambil', '2022-02-26 19:03:51', '2022-03-19 10:35:30'),
-(25, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160893570', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'hehe', '+62823576983', 'Obat Siap', '2022-02-26 19:03:51', '2022-03-19 16:16:52'),
-(26, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160893555', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparm', '+62823576983', 'Obat Siap', '2022-02-26 19:03:51', '2022-03-19 13:08:35'),
-(27, 2, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSUDS-160893522', 3.1, 12000, 6000, NULL, 0, 6000, 'Tunai', 'Same-day', 'Suparma', '082334568', 'Menunggu Diambil', '2022-02-26 19:06:05', '2022-03-20 02:10:01'),
-(28, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160893567', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
-(29, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160893523', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
-(30, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160893579', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
-(31, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160593573', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
-(32, 2, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSUDS-168893573', 3.1, 12000, 6000, NULL, 0, 6000, 'Tunai', 'Same-day', 'Suparma', '082334568', 'Belum Dibayar', '2022-02-26 19:06:05', '2022-03-19 10:09:32'),
-(33, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160823572', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
-(34, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160823574', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Obat Siap', '2022-02-26 19:03:51', '2022-03-20 01:49:01'),
-(35, 1, 'Aldo', 'Gresik Kota Baru', -1.99, 22.5, '0823476839', 5, 'RSLM-160893470', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '2022-02-26 19:03:51', '2022-03-19 10:09:32');
+INSERT INTO `transaksi` (`id`, `rs_id`, `nama_pasien`, `alamat_pasien`, `alamat_maps`, `long_pasien`, `lat_pasien`, `telp_pasien`, `no_antrian`, `no_resi`, `jarak_antar`, `harga_awal`, `harga_driver`, `kode_promo`, `harga_potongan`, `harga_untung`, `metode_bayar`, `metode_antar`, `nama_driver`, `telp_driver`, `status`, `qris_content`, `qris_invid`, `created_at`, `updated_at`) VALUES
+(20, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160893573', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'nulllll', '+62823576983', 'Obat Diracik', '', '', '2022-02-26 19:03:51', '2022-03-19 10:36:18'),
+(21, 2, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSUDS-160893573', 3.1, 12000, 6000, NULL, 0, 6000, 'Tunai', 'Same-day', 'Supar', '082334568', 'Obat Diterima', '', '', '2022-02-26 19:06:05', '2022-03-19 11:08:52'),
+(22, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160893572', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'iqballl', '+62823576983', 'Obat Diterima', '', '', '2022-02-26 19:03:51', '2022-03-20 01:19:32'),
+(24, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160893574', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Supp', '+62823576983', 'Menunggu Diambil', '', '', '2022-02-26 19:03:51', '2022-03-19 10:35:30'),
+(25, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160893570', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'hehe', '+62823576983', 'Obat Siap', '', '', '2022-02-26 19:03:51', '2022-03-19 16:16:52'),
+(26, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160893555', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparm', '+62823576983', 'Obat Siap', '', '', '2022-02-26 19:03:51', '2022-03-19 13:08:35'),
+(27, 2, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSUDS-160893522', 3.1, 12000, 6000, NULL, 0, 6000, 'Tunai', 'Same-day', 'Suparma', '082334568', 'Menunggu Diambil', '', '', '2022-02-26 19:06:05', '2022-03-20 02:10:01'),
+(28, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160893567', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '', '', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
+(29, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160893523', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '', '', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
+(30, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160893579', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '', '', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
+(31, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160593573', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '', '', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
+(32, 2, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSUDS-168893573', 3.1, 12000, 6000, NULL, 0, 6000, 'Tunai', 'Same-day', 'Suparma', '082334568', 'Belum Dibayar', '', '', '2022-02-26 19:06:05', '2022-03-19 10:09:32'),
+(33, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160823572', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '', '', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
+(34, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160823574', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Obat Siap', '', '', '2022-02-26 19:03:51', '2022-03-20 01:49:01'),
+(35, 1, 'Aldo', 'Gresik Kota Baru', '', -1.99, 22.5, '0823476839', 5, 'RSLM-160893470', 3.1, 12000, 6000, NULL, 0, 6000, 'QRIS', 'Same-day', 'Suparman', '+62823576983', 'Belum Dibayar', '', '', '2022-02-26 19:03:51', '2022-03-19 10:09:32'),
+(36, 2, 'fadhil', 'alun', 'Alun-Alun Sidoarjo', NULL, NULL, '082134689', 12, 'RSUDS-16410446891026', 2.478, 0, 6000, '', 0, 0, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-28 10:59:13', '2022-03-28 10:59:13'),
+(39, 2, 'gdgfhf', 'yolo', 'Alun-Alun Sidoarjo', NULL, NULL, '082132434336', 12, 'RSUDS-16436443368016', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-28 11:08:12', '2022-03-28 11:08:12'),
+(40, 2, 'fadhil', 'alun', 'Alun-Alun Sidoarjo', NULL, NULL, '082132434336', 12, 'RSUDS-16429443367267', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-28 11:21:25', '2022-03-28 11:21:25'),
+(41, 2, 'fadhil ikhsna', 'alun', 'Alun-Alun Sidoarjo', NULL, NULL, '08543246464', 12, 'RSUDS-16454464643215', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-28 11:24:37', '2022-03-28 11:24:37'),
+(44, 2, 'fadhil', 'alun', 'Alun-Alun Sidoarjo', NULL, NULL, '08543216161', 12, 'RSUDS-16491461618939', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-28 11:26:56', '2022-03-28 11:26:56'),
+(45, 2, 'fadhil', 'ponti', 'Alun-Alun Sidoarjo', NULL, NULL, '082132455', 12, 'RSUDS-16411424559556', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-28 11:36:25', '2022-03-28 11:36:25'),
+(46, 2, 'fadhh', 'alun', 'Alun-Alun Sidoarjo', NULL, NULL, '08213243366', 50, 'RSUDS-16471433663487', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Express', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-28 12:26:10', '2022-03-28 12:26:10'),
+(47, 2, 'dggff', 'ponti', 'Alun-Alun Sidoarjo', NULL, NULL, '082132434336', 12, 'RSUDS-16413443368364', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-28 12:35:21', '2022-03-28 12:35:21'),
+(48, 2, 'fadhil', 'gato', 'Alun-Alun Sidoarjo', NULL, NULL, '0821324336', 12, 'RSUDS-16436443360146', 2.478, 12000, 6000, 'null', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-28 12:38:37', '2022-03-28 12:38:37'),
+(49, 2, 'fadhil', 'alun', 'Alun-Alun Sidoarjo', NULL, NULL, '08452434', 12, 'RSUDS-16459524347950', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-29 07:20:00', '2022-03-29 07:20:00'),
+(51, 2, 'fadhil', 'pojo', 'Alun-Alun Sidoarjo', NULL, NULL, '0865423555', 12, 'RSUDS-16429535558816', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-29 07:21:53', '2022-03-29 07:21:53'),
+(52, 2, 'faddd', 'pijo', 'Alun-Alun Sidoarjo', NULL, NULL, '0854346765', 12, 'RSUDS-16448567657877', 2.478, 12000, 6000, 'KJ', 200, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-29 07:23:12', '2022-03-29 07:23:12'),
+(53, 2, 'fadhil', 'pojo', 'Alun-Alun Sidoarjo', NULL, NULL, '0852135556', 12, 'RSUDS-16469555561104', 2.478, 12000, 6000, 'KJ', 200, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-29 07:25:44', '2022-03-29 07:25:44'),
+(54, 2, 'awawa', 'polo', 'Alun-Alun Sidoarjo', NULL, NULL, '08521346899', 12, 'RSUDS-16417568997059', 2.478, 12000, 6000, 'null', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'Sudah Dibayar', NULL, NULL, '2022-03-29 08:13:38', '2022-03-29 08:13:38'),
+(55, 2, 'fadhil', 'Hahaha', 'Alun-Alun Sidoarjo', NULL, NULL, '0824334664', 12, 'RSUDS-16422546648545', 2.478, 12000, 6000, '', 0, 12000, 'Tunai', 'Same-day', NULL, NULL, 'null', NULL, NULL, '2022-03-29 08:16:41', '2022-03-29 08:16:41');
 
 -- --------------------------------------------------------
 
@@ -335,7 +368,7 @@ ALTER TABLE `promo`
 -- AUTO_INCREMENT for table `riwayat`
 --
 ALTER TABLE `riwayat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `rs`
@@ -347,7 +380,7 @@ ALTER TABLE `rs`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `user`
