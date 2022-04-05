@@ -18,6 +18,8 @@ const {
     getCostHandler,
     getTrackHandler,
     getCheckPromoHandler,
+    getGraphInvoiceHandler,
+    getExportInvoiceHandler,
 } = require('./handler');
 
 const routes = [
@@ -137,6 +139,20 @@ const routes = [
         method: 'GET',
         path: '/api/track/{resi}',
         handler: getTrackHandler,
+        options: {
+        },
+    },
+    { // Untuk list invoice di halaman list invoice #admin,cs
+        method: 'GET',
+        path: '/api/graph_invoice', // Filter id_user via token
+        handler: getGraphInvoiceHandler,
+        options: {
+        },
+    },
+    { // Untuk list invoice di halaman list invoice #admin,cs
+        method: 'GET',
+        path: '/api/export_invoice', // Filter id_user via token
+        handler: getExportInvoiceHandler,
         options: {
         },
     },

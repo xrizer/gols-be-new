@@ -9,6 +9,7 @@ const {
   setToken,
 } = require('./jwt');
 const { response } = require('@hapi/hapi/lib/validation');
+const { Knex } = require('knex');
 
 const userLoginHandler = (request, h) => {
   const {
@@ -223,7 +224,7 @@ const userAuthHandler = (request, h) => {
 
 };
 
-const addHospitalHandler = async(request, h) => {
+const addHospitalHandler = async (request, h) => {
   console.log(request.payload)
   const authHeader = request.headers.authorization.split(' ')[1];
   if (authHeader) {
@@ -241,18 +242,18 @@ const addHospitalHandler = async(request, h) => {
 
 
   const checkKode = await knex('rs')
-  .select()
-  .where('kode_rs','=',request.payload.kode_rs)
-  .then((results) => {
-    
-    if (!results || results.length == 0) {
-        return true;
-    }else{
-      return false;
-    }
-  })
+    .select()
+    .where('kode_rs', '=', request.payload.kode_rs)
+    .then((results) => {
 
-  if(!checkKode){
+      if (!results || results.length == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+
+  if (!checkKode) {
     const response = h.response({
       error: 'Duplicate Entry',
       message: 'Kode rumah sakit sudah ada',
@@ -264,11 +265,11 @@ const addHospitalHandler = async(request, h) => {
 
   const newRecord = request.payload;
 
-  if(!request.payload.pin){
+  if (!request.payload.pin) {
     newRecord.pin = pin;
   }
 
-  
+
 
   return await knex('rs')
     .insert(newRecord)
@@ -316,16 +317,16 @@ const getListHospitalHandler = (request, h) => {
   }
 
   return knex('rs')
-    .select('rs.id', 'rs.kode_rs', 'rs.is_cs', 'rs.nama_rs',knex.raw('COALESCE(`transaksi`.`num_progress`, 0 ) as ??', ['num_progress']),'rs.updated_at')
+    .select('rs.id', 'rs.kode_rs', 'rs.is_cs', 'rs.nama_rs', knex.raw('COALESCE(`transaksi`.`num_progress`, 0 ) as ??', ['num_progress']), 'rs.updated_at')
     .leftJoin(
       knex('transaksi')
-      .select('rs_id', knex.raw('count(*) as ??', ['num_progress']))
-      .groupBy('rs_id').as('transaksi'),
+        .select('rs_id', knex.raw('count(*) as ??', ['num_progress']))
+        .groupBy('rs_id').as('transaksi'),
       'transaksi.rs_id',
       'rs.id'
     )
-    .where('rs.is_cs','=',request.query.cs)
-    .andWhere('rs.nama_rs','like','%'+request.query.nama_rs+'%')
+    .where('rs.is_cs', '=', request.query.cs)
+    .andWhere('rs.nama_rs', 'like', '%' + request.query.nama_rs + '%')
     .orderBy('updated_at', 'desc')
     .then((results) => {
 
@@ -425,7 +426,7 @@ const getDetailHospitalHandler = (request, h) => {
 
   return knex('rs')
     .where({ id: request.params.id })
-    .select('id', 'kode_rs', 'is_cs', 'nama_rs', 'alamat_rs', 'long_rs', 'lat_rs', 'font_size','pin')
+    .select('id', 'kode_rs', 'is_cs', 'nama_rs', 'alamat_rs', 'long_rs', 'lat_rs', 'font_size', 'pin')
     .then((results) => {
 
       if (!results || results.length == 0) {
@@ -660,7 +661,7 @@ const getListInvoiceHandler = (request, h) => {
   const status = (request.query.status) ? request.query.status : '';
 
   return knex('rs')
-    .select('transaksi.id', 'transaksi.rs_id', 'transaksi.updated_at', 'transaksi.nama_pasien', 'transaksi.no_resi', 'transaksi.status', 'rs.is_cs','transaksi.updated_at')
+    .select('transaksi.id', 'transaksi.rs_id', 'transaksi.updated_at', 'transaksi.nama_pasien', 'transaksi.no_resi', 'transaksi.status', 'rs.is_cs', 'transaksi.updated_at')
     .rightJoin('transaksi', 'rs.id', 'transaksi.rs_id')
     .where('rs_id', '=', request.query.rs_id)
     .andWhere('status', 'like', '%' + status + '%')
@@ -807,11 +808,11 @@ const updateInvoiceHandler = async (request, h) => {
   }
 
   var updateInvoiceData = '';
-  if(request.payload.nama_driver != ''){
+  if (request.payload.nama_driver != '') {
     updateInvoiceData = {
       nama_driver: request.payload.nama_driver
     }
-  }else if(request.payload.status != ''){
+  } else if (request.payload.status != '') {
     updateInvoiceData = {
       status: request.payload.status
     }
@@ -854,15 +855,15 @@ const updateInvoiceHandler = async (request, h) => {
         detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Menunggu pembayaran' };
       } else if (request.payload.status == 'Sudah Dibayar') {
         detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Pembayaran lunas' };
-      }else if (request.payload.status == 'Obat Diracik') {
+      } else if (request.payload.status == 'Obat Diracik') {
         detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat sedang diracik' };
-      }else if (request.payload.status == 'Obat Siap') {
+      } else if (request.payload.status == 'Obat Siap') {
         detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat selesai diracik' };
-      }else if (request.payload.status == 'Menunggu Diambil') {
+      } else if (request.payload.status == 'Menunggu Diambil') {
         detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat menunggu diambil oleh driver' };
-      }else if (request.payload.status == 'Obat Diantar') {
+      } else if (request.payload.status == 'Obat Diantar') {
         detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat sedang diantar menuju alamat' };
-      }else if (request.payload.status == 'Obat Diterima') {
+      } else if (request.payload.status == 'Obat Diterima') {
         detailRiwayat = { transaksi_id: request.params.id, detail_riwayat: 'Obat telah diterima oleh pelanggan' };
       }
 
@@ -921,19 +922,19 @@ const addPromoHandler = async (request, h) => {
   }
 
   const checkKode = await knex('promo')
-  .select()
-  .where('kode_promo','=',request.payload.kode_promo)
-  .andWhere('is_expired','=','0')
-  .then((results) => {
-    
-    if (!results || results.length == 0) {
-        return true;
-    }else{
-      return false;
-    }
-  })
+    .select()
+    .where('kode_promo', '=', request.payload.kode_promo)
+    .andWhere('is_expired', '=', '0')
+    .then((results) => {
 
-  if(!checkKode){
+      if (!results || results.length == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+
+  if (!checkKode) {
     const response = h.response({
       error: 'Duplicate Entry',
       message: 'Kode promo masih berlaku',
@@ -988,8 +989,8 @@ const getListPromoHandler = (request, h) => {
 
   return knex('promo')
     .select()
-    .where('kode_promo','like','%'+request.query.kode_promo+'%')
-    .andWhere({is_expired:request.query.is_expired})
+    .where('kode_promo', 'like', '%' + request.query.kode_promo + '%')
+    .andWhere({ is_expired: request.query.is_expired })
     .orderBy('updated_at', 'desc')
     .then((results) => {
 
@@ -1181,7 +1182,7 @@ const getTrackHandler = async (request, h) => {
     .select('transaksi.*', 'rs.nama_rs', 'rs.alamat_rs')
     .rightJoin('transaksi', 'rs.id', 'transaksi.rs_id')
     .where('transaksi.no_resi', '=', request.params.resi)
-    
+
     .then((results) => {
 
       if (!results || results.length == 0) {
@@ -1213,7 +1214,7 @@ const getTrackHandler = async (request, h) => {
   if (detailInvoice.statusCode == 200 && detailInvoice.err != 'NULL_DATA') {
 
     return await knex('riwayat')
-      .select('id','detail_riwayat',knex.raw('DATE_FORMAT(`created_at`, "%Y-%m-%d %H:%i:%s") as ??', ['created_at']))
+      .select('id', 'detail_riwayat', knex.raw('DATE_FORMAT(`created_at`, "%Y-%m-%d %H:%i:%s") as ??', ['created_at']))
       .where('transaksi_id', '=', detailInvoice.detail_transaksi.id)
       .orderBy('id', 'desc')
       .then((results) => {
@@ -1230,8 +1231,6 @@ const getTrackHandler = async (request, h) => {
 
       })
       .catch((err) => {
-
-// https://www.duniailkom.com/tutorial-belajar-mysql-cara-memformat-tampilan-tanggal-mysql-date_format/
 
         const response = h.response({
           error: err,
@@ -1270,8 +1269,8 @@ const getCheckPromoHandler = (request, h) => {
   }
 
   return knex('promo')
-    .where('kode_promo','=',request.params.kode_promo)
-    .andWhere('max_jarak','>=',request.query.jarak)
+    .where('kode_promo', '=', request.params.kode_promo)
+    .andWhere('max_jarak', '>=', request.query.jarak)
     .select()
     .then((results) => {
 
@@ -1312,6 +1311,244 @@ const getCheckPromoHandler = (request, h) => {
 
 }
 
+const getGraphInvoiceHandler = (request, h) => {
+
+  const authHeader = request.headers.authorization.split(' ')[1];
+  if (authHeader) {
+    authData = getAuth(authHeader);
+  }
+  if (authData.message == 'invalid token' || authData.message == 'jwt expired' || authData.message == 'jwt malformed' || authData.message == 'Unexpected token  in JSON at position 0') {
+    const response = h.response({
+      error: 'FORBIDDEN',
+      message: authData.message,
+      statusCode: 403,
+    });
+    response.code(403);
+    return response;
+  }
+
+
+
+  return knex
+    .select(
+      'transaksi.total_omzet',
+      'transaksi.total_untung',
+      knex.raw('COALESCE(`same_day`.`total_sameday`, 0 ) as ??', ['total_sameday']),
+      knex.raw('COALESCE(`express`.`total_express`, 0 ) as ??', ['total_express']),
+      'transaksi.tanggal'
+    )
+    .fromRaw('(SELECT COUNT(`metode_antar`) as total_express, DATE_FORMAT(`created_at`, "%Y-%m-%d") as tanggal from transaksi WHERE metode_antar = "Express" GROUP BY tanggal) as ??', ['express'])
+    .rightJoin(
+      knex('transaksi')
+        .select(
+          knex.raw('(SUM(`transaksi`.`harga_awal`))-(SUM(`transaksi`.`harga_potongan`)) as ??', ['total_omzet']),
+          knex.raw('SUM(`transaksi`.`harga_untung`) as ??', ['total_untung']),
+          knex.raw('DATE_FORMAT(`created_at`, "%Y-%m-%d") as ??', ['tanggal'])
+        )
+        .groupBy('tanggal').as('transaksi'),
+      'express.tanggal',
+      'transaksi.tanggal'
+    )
+    .leftJoin(
+      knex('transaksi')
+        .select(
+          knex.raw('COUNT(`metode_antar`) as ??', ['total_sameday']),
+          knex.raw('DATE_FORMAT(`created_at`, "%Y-%m-%d") as ??', ['tanggal'])
+        )
+        .groupBy('tanggal').as('same_day'),
+      'same_day.tanggal',
+      'transaksi.tanggal'
+    )
+    .groupBy('transaksi.tanggal')
+    .orderBy('transaksi.tanggal', 'asc')
+    .where('transaksi.tanggal', '>=', request.query.start)
+    .andWhere('transaksi.tanggal', '<=', request.query.end)
+    .limit(30)
+    .then((results) => {
+
+      if (!results || results.length == 0) {
+
+        const response = h.response({
+          error: 'NULL_DATA',
+          message: 'Daftar transaksi tidak ditemukan',
+          statusCode: 200,
+        });
+        response.code(200);
+        return response;
+
+      } else {
+
+        const response = h.response({
+          error: '-',
+          message: 'Daftar transaksi ditemukan',
+          statusCode: 200,
+          list_grafik: results,
+        });
+        response.code(200);
+        return response;
+
+      }
+
+    }).catch((err) => {
+
+      const response = h.response({
+        error: err,
+        message: 'Internal server error',
+        statusCode: 500,
+      });
+      response.code(500);
+      return response;
+
+    });
+}
+
+const getExportInvoiceHandler = async (request, h) => {
+
+  const authHeader = request.headers.authorization.split(' ')[1];
+  if (authHeader) {
+    authData = getAuth(authHeader);
+  }
+  if (authData.message == 'invalid token' || authData.message == 'jwt expired' || authData.message == 'jwt malformed' || authData.message == 'Unexpected token  in JSON at position 0') {
+    const response = h.response({
+      error: 'FORBIDDEN',
+      message: authData.message,
+      statusCode: 403,
+    });
+    response.code(403);
+    return response;
+  }
+
+  var query = knex('transaksi').
+    select(
+      'transaksi.id',
+      knex.raw('DATE_FORMAT(`transaksi`.`created_at`, "%Y-%m-%d %H:%i:%s") as ??', ['created_at']),
+      'transaksi.no_resi',
+      'transaksi.no_antrian',
+      'transaksi.nama_pasien',
+      'transaksi.alamat_pasien',
+      'transaksi.telp_pasien',
+      'transaksi.nama_driver',
+      'transaksi.harga_awal',
+      'transaksi.harga_potongan',
+      knex.raw('(`transaksi`.`harga_awal`)-(`transaksi`.`harga_potongan`) as ??', ['total_omzet']),
+      'transaksi.harga_driver',
+      'transaksi.harga_untung',
+      knex.raw('DATE_FORMAT(`obat_siap`.`created_at`, "%Y-%m-%d %H:%i:%s") as ??', ['obat_siap']),
+      knex.raw('DATE_FORMAT(`obat_diantar`.`created_at`, "%Y-%m-%d %H:%i:%s") as ??', ['obat_diantar']),
+      knex.raw('DATE_FORMAT(`obat_diterima`.`created_at`, "%Y-%m-%d %H:%i:%s") as ??', ['obat_diterima']),
+    )
+    .leftJoin(
+      knex('riwayat')
+        .select(
+          'transaksi_id',
+          'created_at'
+        )
+        .where(
+          'detail_riwayat', '=', 'Obat selesai diracik'
+        )
+        .as('obat_siap'),
+      'transaksi.id',
+      'obat_siap.transaksi_id'
+    )
+    .leftJoin(
+      knex('riwayat')
+        .select(
+          'transaksi_id',
+          'created_at'
+        )
+        .where(
+          'detail_riwayat', '=', 'Obat sedang diantar menuju alamat'
+        )
+        .as('obat_diantar'),
+      'transaksi.id',
+      'obat_diantar.transaksi_id'
+    )
+    .leftJoin(
+      knex('riwayat')
+        .select(
+          'transaksi_id',
+          'created_at'
+        )
+        .where(
+          'detail_riwayat', '=', 'Obat telah diterima oleh pelanggan'
+        )
+        .as('obat_diterima'),
+      'transaksi.id',
+      'obat_diterima.transaksi_id'
+    )
+    .where(
+      'transaksi.status', '=', 'Obat Diterima'
+    );
+
+    if(request.query.action == "range"){
+      console.log(request.query);
+      query = query.andWhere('transaksi.created_at', '>=', request.query.start)
+      .andWhere('transaksi.created_at', '<=', request.query.end);
+    }
+    query = await query.orderBy(
+      'transaksi.created_at', 'asc'
+    )
+    .then((results) => {
+
+      if (!results || results.length == 0) {
+
+        return null;
+
+      } else {
+
+        return results;
+
+      }
+
+    }).catch((err) => {
+      console.log(err)
+      return 'Internal server error';
+    });
+
+  if (query == null || query.length == 0) {
+    const response = h.response({
+      error: 'NULL_DATA',
+      message: 'Daftar transaksi tidak ditemukan',
+      statusCode: 200,
+    });
+    response.code(200);
+    return response;
+  }
+  else if (query == 'Internal server error') { 
+    const response = h.response({
+      error: query,
+      message: 'Internal server error',
+      statusCode: 500,
+    });
+    response.code(500);
+    return response;
+  }
+  else {
+    console.log(query.length)
+    const response = h.response({
+      error: '-',
+      message: 'Daftar transaksi ditemukan',
+      statusCode: 200,
+      list_transaksi: query,
+    });
+    response.code(200);
+    return response;
+  }
+
+}
+
+function convertHMS(value) {
+  const sec = parseInt(value, 10); // convert value to number if it's string
+  let hours   = Math.floor(sec / 3600); // get hours
+  let minutes = Math.floor((sec - (hours * 3600)) / 60); // get minutes
+  let seconds = sec - (hours * 3600) - (minutes * 60); //  get seconds
+  // add 0 if value < 10; Example: 2 => 02
+  if (hours   < 10) {hours   = "0"+hours;}
+  if (minutes < 10) {minutes = "0"+minutes;}
+  if (seconds < 10) {seconds = "0"+seconds;}
+  return hours+':'+minutes+':'+seconds; // Return is HH : MM : SS
+}
+
 module.exports = {
   userLoginHandler,
   userAuthHandler,
@@ -1331,4 +1568,6 @@ module.exports = {
   getCostHandler,
   getTrackHandler,
   getCheckPromoHandler,
+  getGraphInvoiceHandler,
+  getExportInvoiceHandler,
 };
