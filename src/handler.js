@@ -641,7 +641,7 @@ const addInvoiceHandler = async (request, h) => {
 }
 
 const getListInvoiceHandler = (request, h) => {
-
+  
   const authHeader = request.headers.authorization.split(' ')[1];
   if (authHeader) {
     authData = getAuth(authHeader);
@@ -692,7 +692,7 @@ const getListInvoiceHandler = (request, h) => {
     }).catch((err) => {
 
       const response = h.response({
-        error: err,
+        error: err.message,
         message: 'Internal server error',
         statusCode: 500,
       });
