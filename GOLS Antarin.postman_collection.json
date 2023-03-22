@@ -1,0 +1,1179 @@
+{
+	"info": {
+		"_postman_id": "c9971c3d-09de-4f97-b577-fe4ecbd83943",
+		"name": "GOLS Antarin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19643186"
+	},
+	"item": [
+		{
+			"name": "Credential",
+			"item": [
+				{
+					"name": "Login as Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login",
+									"value": "alvin",
+									"type": "text"
+								},
+								{
+									"key": "pin",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/login",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as CS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login",
+									"value": "RSUDS",
+									"type": "text"
+								},
+								{
+									"key": "pin",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "cs",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/login",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as RS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login",
+									"value": "RSUDS",
+									"type": "text"
+								},
+								{
+									"key": "pin",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "rs",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/api/login",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Auth",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJkZXRhaWxfdXNlciI6eyJpZCI6MSwidXNlcm5hbWUiOiJhbHZpbiIsIm5hbWEiOiJNdWhhbW1hZCBBbHZpbiBIaWxteSJ9LCJpYXQiOjE2NDYzMzgwNzEsImV4cCI6MTY0NjM2Njg3MX0.ygGRqnM7gTxRmQIzPwVD51PRlOgOueFgLYwg6EIgGd4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_IP}}/auth",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rumah Sakit",
+			"item": [
+				{
+					"name": "Add RS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VyIjp7InVzZXJfaWQiOjEsInVzZXJuYW1lIjoiYWx2aW4iLCJuYW1hIjoiTXVoYW1tYWQgQWx2aW4gSGlsbXkifSwiaWF0IjoxNjQ1ODc3MzYwLCJleHAiOjE2NDU5MDYxNjB9.AIHu9_RtKMjXZtZqS7YS-aoVn6UT45BuXsOhh7vgpHk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "kode_rs",
+									"value": "RSLM",
+									"type": "text"
+								},
+								{
+									"key": "is_cs",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "nama_rs",
+									"value": "Rumah Sakit Lavalette",
+									"type": "text"
+								},
+								{
+									"key": "alamat_rs",
+									"value": "Malang",
+									"type": "text"
+								},
+								{
+									"key": "long_rs",
+									"value": "0.8",
+									"type": "text"
+								},
+								{
+									"key": "lat_rs",
+									"value": "20.33",
+									"type": "text"
+								},
+								{
+									"key": "font_size",
+									"value": "14",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/hospital",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"hospital"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List RS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJkZXRhaWxfdXNlciI6eyJpZCI6MSwidXNlcm5hbWUiOiJhbHZpbiIsIm5hbWEiOiJNdWhhbW1hZCBBbHZpbiBIaWxteSJ9LCJpYXQiOjE2NDYzMzcyMjgsImV4cCI6MTY0NjM2NjAyOH0.tkosmaieCnXqB3oC4LjppaLeDtHpcvN55L1bcSu1Ezg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/hospital?cs=1&nama_rs=umum",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"hospital"
+							],
+							"query": [
+								{
+									"key": "cs",
+									"value": "1"
+								},
+								{
+									"key": "nama_rs",
+									"value": "umum"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detail RS by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VyIjp7InVzZXJfaWQiOjEsInVzZXJuYW1lIjoiYWx2aW4iLCJuYW1hIjoiTXVoYW1tYWQgQWx2aW4gSGlsbXkifSwiaWF0IjoxNjQ1ODc3MzYwLCJleHAiOjE2NDU5MDYxNjB9.AIHu9_RtKMjXZtZqS7YS-aoVn6UT45BuXsOhh7vgpHk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_IP}}/hospital/2",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"hospital",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update RS by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VyIjp7InVzZXJfaWQiOjEsInVzZXJuYW1lIjoiYWx2aW4iLCJuYW1hIjoiTXVoYW1tYWQgQWx2aW4gSGlsbXkifSwiaWF0IjoxNjQ1ODc3MzYwLCJleHAiOjE2NDU5MDYxNjB9.AIHu9_RtKMjXZtZqS7YS-aoVn6UT45BuXsOhh7vgpHk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama_rs",
+									"value": "Rumah Sakit Lavalette",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/hospital/8",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"hospital",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete RS by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VyIjp7InVzZXJfaWQiOjEsInVzZXJuYW1lIjoiYWx2aW4iLCJuYW1hIjoiTXVoYW1tYWQgQWx2aW4gSGlsbXkifSwiaWF0IjoxNjQ1ODc3MzYwLCJleHAiOjE2NDU5MDYxNjB9.AIHu9_RtKMjXZtZqS7YS-aoVn6UT45BuXsOhh7vgpHk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama_rs",
+									"value": "Rumah Sakit Lavalette",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/hospital/8",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"hospital",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Invoice",
+			"item": [
+				{
+					"name": "Get List Invoice",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY3MiLCJkZXRhaWxfcnMiOnsiaWQiOjIsImtvZGVfcnMiOiJSU1VEUyIsImlzX2NzIjoxLCJuYW1hX3JzIjoiUnVtYWggU2FraXQgVW11bSBEYWVyYWggU2lkb2FyampqIiwiYWxhbWF0X3JzIjoiU2lkb2Fyam8iLCJsb25nX3JzIjoxMTIuNzE1NjQyMywibGF0X3JzIjotNy40NjUyNDUzLCJmb250X3NpemUiOjE0fSwiaWF0IjoxNjU0MjQxNDU4LCJleHAiOjE2NTQyNzAyNTh9.NBGN-EKHuXD2krhln28Oq-HBMAjcRdxvQoRsnYVCt70",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/invoice?status=&rs_id=2",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"invoice"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": ""
+								},
+								{
+									"key": "rs_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Export Invoice",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJkZXRhaWxfdXNlciI6eyJpZCI6MSwidXNlcm5hbWUiOiJhbHZpbiIsIm5hbWEiOiJNdWhhbW1hZCBBbHZpbiBIaWxteSJ9LCJpYXQiOjE2NDkwODQwMzUsImV4cCI6MTY0OTExMjgzNX0.pFXSew-AplX82_k8s6DRYZLya52TiNSRi_F73U9mcPU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/export_invoice",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"export_invoice"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Invoice PR",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VyIjp7InVzZXJfaWQiOjEsInVzZXJuYW1lIjoiYWx2aW4iLCJuYW1hIjoiTXVoYW1tYWQgQWx2aW4gSGlsbXkifSwiaWF0IjoxNjQ1ODc3MzYwLCJleHAiOjE2NDU5MDYxNjB9.AIHu9_RtKMjXZtZqS7YS-aoVn6UT45BuXsOhh7vgpHk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "rs_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "nama_pasien",
+									"value": "Aldo",
+									"type": "text"
+								},
+								{
+									"key": "alamat_pasien",
+									"value": "Gresik Kota Baru",
+									"type": "text"
+								},
+								{
+									"key": "long_pasien",
+									"value": "-1.99",
+									"type": "text"
+								},
+								{
+									"key": "lat_pasien",
+									"value": "22.5",
+									"type": "text"
+								},
+								{
+									"key": "telp_pasien",
+									"value": "0823476839",
+									"type": "text"
+								},
+								{
+									"key": "no_antrian",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "no_resi",
+									"value": "RSUDS-160893573",
+									"type": "text"
+								},
+								{
+									"key": "jarak_antar",
+									"value": "3.1",
+									"type": "text"
+								},
+								{
+									"key": "harga_awal",
+									"value": "12000",
+									"type": "text"
+								},
+								{
+									"key": "harga_driver",
+									"value": "6000",
+									"type": "text"
+								},
+								{
+									"key": "kode_promo",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "harga_potongan",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "harga_untung",
+									"value": "6000",
+									"type": "text"
+								},
+								{
+									"key": "metode_bayar",
+									"value": "Tunai",
+									"type": "text"
+								},
+								{
+									"key": "metode_antar",
+									"value": "Same-day",
+									"type": "text"
+								},
+								{
+									"key": "nama_driver",
+									"value": "Suparma",
+									"type": "text"
+								},
+								{
+									"key": "telp_driver",
+									"value": "082334568",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "Paid",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/invoice",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"invoice"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detail Invoice",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY3MiLCJkZXRhaWxfcnMiOnsiaWQiOjIsImtvZGVfcnMiOiJSU1VEUyIsImlzX2NzIjoxLCJuYW1hX3JzIjoiUnVtYWggU2FraXQgVW11bSBEYWVyYWggU2lkb2Fyam8iLCJhbGFtYXRfcnMiOiJTaWRvYXJqbyIsImxvbmdfcnMiOi03LjQ2NTI0LCJsYXRfcnMiOjExMi43MTM0NTM2LCJmb250X3NpemUiOjE0fSwiaWF0IjoxNjQ2MjUwNjQxLCJleHAiOjE2NDYyNzk0NDF9.q88z5xMk1tTuJK8oilVWiyCy4V3jOT32CkmtBjHg-I0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/invoice/20",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"invoice",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Invoce",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY3MiLCJkZXRhaWxfcnMiOnsiaWQiOjIsImtvZGVfcnMiOiJSU1VEUyIsImlzX2NzIjoxLCJuYW1hX3JzIjoiUnVtYWggU2FraXQgVW11bSBEYWVyYWggU2lkb2Fyam8iLCJhbGFtYXRfcnMiOiJTaWRvYXJqbyIsImxvbmdfcnMiOi03LjQ2NTI0LCJsYXRfcnMiOjExMi43MTM0NTM2LCJmb250X3NpemUiOjE0fSwiaWF0IjoxNjQ1ODk3NDU3LCJleHAiOjE2NDU5MjYyNTd9.uyBmJCh1UYslbVXfJl6zlIZ8KVVt5H-9nUNu7L9ooqM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama_driver",
+									"value": "Suparman",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "telp_driver",
+									"value": "+62823576983",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Medicines Ready",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/invoice/20",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"invoice",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detail Cost",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY3MiLCJkZXRhaWxfcnMiOnsiaWQiOjIsImtvZGVfcnMiOiJSU1VEUyIsImlzX2NzIjoxLCJuYW1hX3JzIjoiUnVtYWggU2FraXQgVW11bSBEYWVyYWggU2lkb2Fyam8iLCJhbGFtYXRfcnMiOiJTaWRvYXJqbyIsImxvbmdfcnMiOi03LjQ2NTI0LCJsYXRfcnMiOjExMi43MTM0NTM2LCJmb250X3NpemUiOjE0fSwiaWF0IjoxNjQ2MDQ5MjQzLCJleHAiOjE2NDYwNzgwNDN9.qoMHisy9f5FHuhKE4FzjnFPaLToFCgchwQ3z2i9YfBM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_IP}}/cost?jarak=11.2",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"cost"
+							],
+							"query": [
+								{
+									"key": "jarak",
+									"value": "11.2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Graph Invoice",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJkZXRhaWxfdXNlciI6eyJpZCI6MSwidXNlcm5hbWUiOiJhbHZpbiIsIm5hbWEiOiJNdWhhbW1hZCBBbHZpbiBIaWxteSJ9LCJpYXQiOjE2NDg4MjkxMjUsImV4cCI6MTY0ODg1NzkyNX0.WQVYoNbzApIMdgyWuqeRU2wWKJr_MTdFP_U00s0qkNk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/graph_invoice",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"graph_invoice"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Promo",
+			"item": [
+				{
+					"name": "Get List Promo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJkZXRhaWxfdXNlciI6eyJpZCI6MSwidXNlcm5hbWUiOiJhbHZpbiIsIm5hbWEiOiJNdWhhbW1hZCBBbHZpbiBIaWxteSJ9LCJpYXQiOjE2NDY4MjQ5NzUsImV4cCI6MTY0Njg1Mzc3NX0.8RuNN06vRThyBGAY00lxSj6E8AhvN2_dkwLxMkfyRkU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_IP}}/promo?kode_promo=merd&is_expired=1",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"promo"
+							],
+							"query": [
+								{
+									"key": "kode_promo",
+									"value": "merd"
+								},
+								{
+									"key": "is_expired",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Promo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJkZXRhaWxfdXNlciI6eyJpZCI6MSwidXNlcm5hbWUiOiJhbHZpbiIsIm5hbWEiOiJNdWhhbW1hZCBBbHZpbiBIaWxteSJ9LCJpYXQiOjE2NDU5NjY4MzksImV4cCI6MTY0NTk5NTYzOX0.f23zuYACOKyUqOugtdamu57FuaLR5LTtTu_XJWPEb-c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "kode_promo",
+									"value": "MERDEKA",
+									"type": "text"
+								},
+								{
+									"key": "harga_potongan",
+									"value": "3000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/promo",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"promo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Promo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJkZXRhaWxfdXNlciI6eyJpZCI6MSwidXNlcm5hbWUiOiJhbHZpbiIsIm5hbWEiOiJNdWhhbW1hZCBBbHZpbiBIaWxteSJ9LCJpYXQiOjE2NDU5NjY4MzksImV4cCI6MTY0NTk5NTYzOX0.f23zuYACOKyUqOugtdamu57FuaLR5LTtTu_XJWPEb-c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "is_expired",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_IP}}/promo/1",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"promo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detail Promo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJkZXRhaWxfdXNlciI6eyJpZCI6MSwidXNlcm5hbWUiOiJhbHZpbiIsIm5hbWEiOiJNdWhhbW1hZCBBbHZpbiBIaWxteSJ9LCJpYXQiOjE2NDU5NjY4MzksImV4cCI6MTY0NTk5NTYzOX0.f23zuYACOKyUqOugtdamu57FuaLR5LTtTu_XJWPEb-c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_IP}}/promo/1",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"promo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detail Promo by Kode",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJkZXRhaWxfdXNlciI6eyJpZCI6MSwidXNlcm5hbWUiOiJhbHZpbiIsIm5hbWEiOiJNdWhhbW1hZCBBbHZpbiBIaWxteSJ9LCJpYXQiOjE2NDU5NjY4MzksImV4cCI6MTY0NTk5NTYzOX0.f23zuYACOKyUqOugtdamu57FuaLR5LTtTu_XJWPEb-c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_IP}}/promo/1",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"promo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tracking",
+			"item": [
+				{
+					"name": "Get Track",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_IP}}/track/RSLM-160893573",
+							"host": [
+								"{{LOCAL_IP}}"
+							],
+							"path": [
+								"track",
+								"RSLM-160893573"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "QRIS",
+			"item": [
+				{
+					"name": "Get QR",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://qris.id/restapi/qris/show_qris.php?do=create-invoice&apikey=139139210613075&mID=195238937648&cliTrxNumber=RSLM-0123456&cliTrxAmount=2000",
+							"protocol": "https",
+							"host": [
+								"qris",
+								"id"
+							],
+							"path": [
+								"restapi",
+								"qris",
+								"show_qris.php"
+							],
+							"query": [
+								{
+									"key": "do",
+									"value": "create-invoice"
+								},
+								{
+									"key": "apikey",
+									"value": "139139210613075"
+								},
+								{
+									"key": "mID",
+									"value": "195238937648"
+								},
+								{
+									"key": "cliTrxNumber",
+									"value": "RSLM-0123456"
+								},
+								{
+									"key": "cliTrxAmount",
+									"value": "2000"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "QRIS",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://qris.id/restapi/qris/show_qris.php?do=create-invoice&apikey=139139210613075&mID=195238937648&cliTrxNumber=RSLM-0123456&cliTrxAmount=2000",
+									"protocol": "https",
+									"host": [
+										"qris",
+										"id"
+									],
+									"path": [
+										"restapi",
+										"qris",
+										"show_qris.php"
+									],
+									"query": [
+										{
+											"key": "do",
+											"value": "create-invoice"
+										},
+										{
+											"key": "apikey",
+											"value": "139139210613075"
+										},
+										{
+											"key": "mID",
+											"value": "195238937648"
+										},
+										{
+											"key": "cliTrxNumber",
+											"value": "RSLM-0123456"
+										},
+										{
+											"key": "cliTrxAmount",
+											"value": "2000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Length",
+									"value": "437"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Server",
+									"value": "Apache"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/7.4.24"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 19 Mar 2022 03:59:48 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"qris_content\": \"00020101021226680016ID.CO.TELKOM.WWW011893600898023893764802150001952389376480303UMI51440014ID.CO.QRIS.WWW0215ID20210763801990303UMI52045499530336054072000.005502015802ID5904GOLS6011KAB. GRESIK610561124621505111000134434663040010\",\n        \"qris_request_date\": \"2022-03-19 10:59:47\",\n        \"qris_invoiceid\": \"10001344346\",\n        \"qris_nmid\": \"ID2021076380199\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Check Transaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://qris.id/restapi/qris/checkpaid_qris.php?do=checkStatus&apikey=139139210613075&mID=195238937648&invid=10001344346&trxvalue=2000&trxdate=2022-03-19",
+							"protocol": "https",
+							"host": [
+								"qris",
+								"id"
+							],
+							"path": [
+								"restapi",
+								"qris",
+								"checkpaid_qris.php"
+							],
+							"query": [
+								{
+									"key": "do",
+									"value": "checkStatus"
+								},
+								{
+									"key": "apikey",
+									"value": "139139210613075"
+								},
+								{
+									"key": "mID",
+									"value": "195238937648"
+								},
+								{
+									"key": "invid",
+									"value": "10001344346"
+								},
+								{
+									"key": "trxvalue",
+									"value": "2000"
+								},
+								{
+									"key": "trxdate",
+									"value": "2022-03-19"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Check Transaction",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://qris.id/restapi/qris/checkpaid_qris.php?do=checkStatus&apikey=139139210613075&mID=195238937648&invid=10001344346&trxvalue=2000&trxdate=2022-03-19",
+									"protocol": "https",
+									"host": [
+										"qris",
+										"id"
+									],
+									"path": [
+										"restapi",
+										"qris",
+										"checkpaid_qris.php"
+									],
+									"query": [
+										{
+											"key": "do",
+											"value": "checkStatus"
+										},
+										{
+											"key": "apikey",
+											"value": "139139210613075"
+										},
+										{
+											"key": "mID",
+											"value": "195238937648"
+										},
+										{
+											"key": "invid",
+											"value": "10001344346"
+										},
+										{
+											"key": "trxvalue",
+											"value": "2000"
+										},
+										{
+											"key": "trxdate",
+											"value": "2022-03-19"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Length",
+									"value": "79"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Server",
+									"value": "Apache"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/7.4.24"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Mar 2022 12:02:19 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"failed\",\n    \"data\": {\n        \"qris_status\": \"unpaid\"\n    }\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

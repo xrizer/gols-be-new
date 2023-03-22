@@ -1137,6 +1137,7 @@ const getCostHandler = (request, h) => {
   return knex('harga')
     .where('min_jarak', '<=', request.query.jarak)
     .andWhere('max_jarak', '>=', request.query.jarak)
+    .andWhere('metode_antar', '=', request.query.metode_antar)
     .select()
     .then((results) => {
 
